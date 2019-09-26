@@ -2,16 +2,22 @@ package http
 
 import (
     "github.com/gin-gonic/gin"
+    "io"
     "learnku-api/config"
     "learnku-api/pkg/response"
     "log"
+    "os"
 )
 
 const (
-    APIRoot = "/api"
+    APIRoot     = "/api"
+    LogFilePath = "./runtime/log/"
 )
 
 func Init() {
+    file, _ := os.Create(LogFilePath + "gin.log")
+    gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
+
     engine := gin.Default()
 
     gin.SetMode(config.AppConfig.Runmode)
@@ -30,7 +36,7 @@ func initRouter(e *gin.Engine) {
         users := api.Group("/users")
         {
             users.GET("/", func(context *gin.Context) {
-                response.JSON(context, 200,"hello", nil)
+                response.JSON(context, 200, "hello", nil)
             })
         }
     }
