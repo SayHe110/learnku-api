@@ -12,6 +12,7 @@ const (
 
 var (
     AppConfig *appConfig
+    DBConfig  *dbConfig
 )
 
 func Init(filename string) {
@@ -28,4 +29,5 @@ func Init(filename string) {
     }
 
     AppConfig = initAppConfig()
+    DBConfig = initDbConfig()
 }
