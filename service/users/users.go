@@ -14,8 +14,8 @@ func Users() (res []*users.Users, err error) {
     return
 }
 
-func Store() (err error) {
-    if err = usersHandle.StoreUser(); err != nil {
+func Store(param *users.UserStoreParam) (err error) {
+    if err = usersHandle.StoreUser(param); err != nil {
         return err
     }
 

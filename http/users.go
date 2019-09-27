@@ -14,12 +14,15 @@ func userList(c *gin.Context) {
 }
 
 func userStore(c *gin.Context) {
-    if err := c.Bind(&users.UserStoreParam{}); err != nil {
+
+    userRes := &users.UserStoreParam{}
+
+    if err := c.ShouldBind(&userRes); err != nil {
         response.JSON(c, 50001, "参数绑定错误", nil)
         return
     }
 
-    if err := userSvc.Store(); err != nil {
+    if err := userSvc.Store(userRes); err != nil {
         response.JSON(c, http.StatusOK, "注册失败", err)
         return
     }

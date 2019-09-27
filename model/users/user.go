@@ -20,8 +20,8 @@ type Users struct {
 }
 
 type UserStoreParam struct {
-    Email     string `from:"email" binging:"required"`
-    Password  string `from:"password" binging:"required"`
+    Email     string `form:"email" binding:"required"`
+    Password  string `form:"password" binding:"required"`
     CreatedAt time.Time
 }
 
