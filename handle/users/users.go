@@ -2,14 +2,13 @@ package users
 
 import (
     "learnku-api/bootstrap"
-    "learnku-api/model/users"
+    userModel "learnku-api/model/users"
     "log"
 )
 
-func GetUserList() (res *users.Users, err error) {
-    res = &users.Users{}
+func GetUserList() (res []*userModel.Users, err error) {
 
-    if err = bootstrap.DB.Self.Find(&res).Error; err != nil {
+    if err = bootstrap.DB.Self.Limit(2).Offset(0).Find(&res).Error; err != nil {
         log.Printf("select users field (%v)", err)
         return nil, err
     }

@@ -5,7 +5,7 @@ import (
     "learnku-api/model/users"
 )
 
-func Users() (res *users.Users, err error) {
+func Users() (res []*users.Users, err error) {
     res, err = usersHandle.GetUserList()
     if err != nil {
         return nil, err
