@@ -14,7 +14,6 @@ func userList(c *gin.Context) {
 }
 
 func userStore(c *gin.Context) {
-
     userRes := &users.UserStoreParam{}
 
     if err := c.ShouldBind(&userRes); err != nil {
@@ -22,11 +21,15 @@ func userStore(c *gin.Context) {
         return
     }
 
-    if err := userSvc.Store(userRes); err != nil {
-        response.JSON(c, http.StatusOK, "注册失败", err)
+    if err := userSvc.Store(c, userRes); err != nil {
+        response.JSON(c, http.StatusOK, "注册失败", err.Error())
         return
     }
 
     response.JSON(c, http.StatusOK, "注册成功", nil)
     return
+}
+
+func userLogin(c *gin.Context) {
+    userSvc.Login()
 }

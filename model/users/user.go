@@ -25,6 +25,6 @@ type UserStoreParam struct {
     CreatedAt time.Time
 }
 
-//func (UserStoreParam) TableName() string {
-//    return "users"
+//type UserLoginParam struct {
+//
 //}
