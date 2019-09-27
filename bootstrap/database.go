@@ -23,14 +23,18 @@ func SetupDB() {
         true,
         "Local")
 
-    DB, err := gorm.Open("mysql", sourceDB)
+    newDB, err := gorm.Open("mysql", sourceDB)
     if err != nil {
         log.Printf("database connection failed. (%v)", err)
         panic(err)
     }
 
     // 设置数据库连接
-    setupDBConfig(DB)
+    setupDBConfig(newDB)
+
+    DB = &Database{
+        Self: newDB,
+    }
 }
 
 func setupDBConfig(db *gorm.DB) {
@@ -41,7 +45,7 @@ func setupDBConfig(db *gorm.DB) {
 
 func (db *Database) CloseDB() {
     err := db.Self.Close()
-    if err !=nil {
+    if err != nil {
         log.Printf("database close failed. (%v)", err)
     }
 }
