@@ -30,10 +30,10 @@ func SetupDB() {
     }
 
     // 设置数据库连接
-    setupDB(DB)
+    setupDBConfig(DB)
 }
 
-func setupDB(db *gorm.DB) {
+func setupDBConfig(db *gorm.DB) {
     db.LogMode(true)
     db.DB().SetMaxOpenConns(1000) // 最大打开的连接数
     db.DB().SetMaxIdleConns(0)    // 用于设置闲置的连接数

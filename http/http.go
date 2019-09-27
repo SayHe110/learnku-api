@@ -4,6 +4,7 @@ import (
     "github.com/gin-gonic/gin"
     "io"
     "learnku-api/config"
+    "learnku-api/pkg/params"
     "learnku-api/pkg/response"
     "log"
     "os"
@@ -36,7 +37,9 @@ func initRouter(e *gin.Engine) {
         users := api.Group("/users")
         {
             users.GET("/", func(context *gin.Context) {
-                response.JSON(context, 200, "hello", nil)
+                test := params.TestParams
+
+                response.JSON(context, 200, test, nil)
             })
         }
     }
