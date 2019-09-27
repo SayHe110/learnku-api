@@ -18,3 +18,13 @@ type Users struct {
     UpdatedAt         time.Time `json:"updated_at"`
     DeletedAt         time.Time `json:"deleted_at"`
 }
+
+type UserStoreParam struct {
+    Email     string `from:"email" binging:"required"`
+    Password  string `from:"password" binging:"required"`
+    CreatedAt time.Time
+}
+
+//func (UserStoreParam) TableName() string {
+//    return "users"
+//}

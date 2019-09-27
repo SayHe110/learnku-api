@@ -13,3 +13,11 @@ func Users() (res []*users.Users, err error) {
 
     return
 }
+
+func Store() (err error) {
+    if err = usersHandle.StoreUser(); err != nil {
+        return err
+    }
+
+    return
+}

@@ -35,6 +35,7 @@ func initRouter(e *gin.Engine) {
         users := api.Group("/users")
         {
             users.GET("/", userList)
+            users.POST("/store", userStore)
         }
     }
 }
