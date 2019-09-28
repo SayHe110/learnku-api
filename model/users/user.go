@@ -1,6 +1,9 @@
 package users
 
-import "time"
+import (
+    "gopkg.in/go-playground/validator.v9"
+    "time"
+)
 
 type Users struct {
     ID                int64     `json:"id"`
@@ -21,10 +24,18 @@ type Users struct {
 
 type UserStoreParam struct {
     Email     string `form:"email" binding:"required"`
-    Password  string `form:"password" binding:"required"`
+    Password  string `form:"password" binding:"required" validate:"pwd_val"`
     CreatedAt time.Time
 }
 
-//type UserLoginParam struct {
-//
-//}
+func (param *UserStoreParam) UserStoreValidator() error {
+    validate := validator.New()
+    _ = validate.RegisterValidation("pwd_val", ValidatePwd)
+    err := validate.Struct(param)
+
+    return err
+}
+
+func ValidatePwd(fl validator.FieldLevel) bool {
+    return fl.Field().String() == "pwd"
+}

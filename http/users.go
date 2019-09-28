@@ -21,8 +21,13 @@ func userStore(c *gin.Context) {
         return
     }
 
+    if err := userRes.UserStoreValidator(); err != nil {
+        response.JSON(c, 5000, "参数验证错误", nil)
+        return
+    }
+
     if err := userSvc.Store(c, userRes); err != nil {
-        response.JSON(c, http.StatusOK, "注册失败", err.Error())
+        response.JSON(c, 50002, "注册失败", err.Error())
         return
     }
 
