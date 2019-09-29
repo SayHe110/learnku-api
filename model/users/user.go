@@ -25,14 +25,13 @@ type Users struct {
 }
 
 type UserStoreParam struct {
-    Email     string `form:"email" binding:"required" validate:"email"`
-    Password  string `form:"password" binding:"required" validate:"max=15,min=10"`
-    CreatedAt time.Time
+    Email      string `form:"email" binding:"required" validate:"email"`
+    Password   string `form:"password" binding:"required" validate:"max=15,min=10"`
+    RePassword string `form:"re_password" validate:"max=15,min=10,eqfield=Password"`
 }
 
 func (param *UserStoreParam) UserStoreValidator() (valError tools.ValidatorCommonError) {
     trans, _ := config.Uni.GetTranslator("zh")
-
     // _ = validate.RegisterValidation("pwd_val", ValidatePwd)
 
     err := config.Validate.Struct(param)

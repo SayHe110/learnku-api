@@ -21,10 +21,6 @@ func Init() {
 
     gin.SetMode(config.AppConfig.Runmode)
 
-    // validator error handler
-    //uni := ut.New(zh.New(), zh.New())
-    //engine.Use(middleware.NewValidatorErrorHandler(uni).HandlerValidatorError)
-
     initRouter(engine)
 
     if err := engine.Run(config.AppConfig.Url); err != nil {
