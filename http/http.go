@@ -4,6 +4,7 @@ import (
     "github.com/gin-gonic/gin"
     "io"
     "learnku-api/config"
+    "learnku-api/middleware"
     "log"
     "os"
 )
@@ -38,6 +39,8 @@ func initRouter(e *gin.Engine) {
         }
 
         users := api.Group("/users")
+        // auth middleware
+        users.Use(middleware.JWT())
         {
             users.GET("/", userList)
         }

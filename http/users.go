@@ -3,6 +3,7 @@ package http
 import (
     "github.com/gin-gonic/gin"
     "learnku-api/model/users"
+    "learnku-api/pkg/jwt"
     "learnku-api/pkg/response"
     userSvc "learnku-api/service/users"
     "net/http"
@@ -22,7 +23,7 @@ func userStore(c *gin.Context) {
     }
 
     if err := userRes.UserStoreValidator().Errors; err != nil {
-        response.JSON(c, 50002, "参数验证错误" ,userRes.UserStoreValidator())
+        response.JSON(c, 50002, "参数验证错误", userRes.UserStoreValidator())
         return
     }
 
@@ -31,7 +32,15 @@ func userStore(c *gin.Context) {
         return
     }
 
-    response.JSON(c, http.StatusOK, "注册成功", nil)
+    gerToken, err := jwt.GenerateToken(userRes.Email, userRes.Password)
+    if err != nil {
+        response.JSON(c, 50004, "生成 token 错误", err.Error())
+        return
+    }
+
+    response.JSON(c, http.StatusOK, "注册成功", gin.H{
+        "token": gerToken,
+    })
     return
 }
 
