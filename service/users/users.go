@@ -3,7 +3,7 @@ package users
 import (
     "errors"
     "github.com/gin-gonic/gin"
-    usersHandle "learnku-api/handle/users"
+    usersHandle "learnku-api/handler/users"
     "learnku-api/model/users"
     "learnku-api/pkg/auth"
 )

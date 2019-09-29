@@ -5,6 +5,7 @@ import (
     "learnku-api/model/users"
     "learnku-api/pkg/response"
     userSvc "learnku-api/service/users"
+    "learnku-api/tools"
     "net/http"
 )
 
@@ -21,13 +22,15 @@ func userStore(c *gin.Context) {
         return
     }
 
-    if err := userRes.UserStoreValidator(); err != nil {
-        response.JSON(c, 5000, "参数验证错误", nil)
+    res := tools.ValidatorCommonError{}
+    res = userRes.UserStoreValidator()
+    if res.Errors != nil {
+        response.JSON(c, 50002, "参数验证错误" ,userRes.UserStoreValidator())
         return
     }
 
     if err := userSvc.Store(c, userRes); err != nil {
-        response.JSON(c, 50002, "注册失败", err.Error())
+        response.JSON(c, 50003, "注册失败", err.Error())
         return
     }
 

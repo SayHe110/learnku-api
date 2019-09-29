@@ -1,6 +1,8 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+    "github.com/spf13/viper"
+)
 
 type appConfig struct {
     Name    string
