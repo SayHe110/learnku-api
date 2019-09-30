@@ -10,28 +10,28 @@ import (
 )
 
 func JWT() gin.HandlerFunc {
-   return func(c *gin.Context) {
-       code := http.StatusOK
-       token := c.Query("token")
+    return func(c *gin.Context) {
+        code := http.StatusOK
+        token := c.Query("token")
 
-       if token == "" {
-           code = ecode.INVALID_TOKEN_PARAMS.Code
-       } else {
-           claims, err := jwt.ParseToken(token)
-           if err != nil {
-               code = ecode.PARSE_TOKEN_ERROR.Code
-           } else if time.Now().Unix() > claims.ExpiresAt {
-               code = ecode.TOKEN_EXPIRE_TIME.Code
-           }
-       }
+        if token == "" {
+            code = ecode.InvalidTokenParams.Code
+        } else {
+            claims, err := jwt.ParseToken(token)
+            if err != nil {
+                code = ecode.ParseTokenError.Code
+            } else if time.Now().Unix() > claims.ExpiresAt {
+                code = ecode.TokenExpireTime.Code
+            }
+        }
 
-       if code != http.StatusOK {
-           response.JSON(c, http.StatusOK, "token 错误", nil)
+        if code != http.StatusOK {
+            response.JSON(c, http.StatusOK, ecode.GetECode(code), nil)
 
-           c.Abort()
-           return
-       }
+            c.Abort()
+            return
+        }
 
-       c.Next()
-   }
+        c.Next()
+    }
 }

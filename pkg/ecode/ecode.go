@@ -1,12 +1,30 @@
 package ecode
 
-type ecode struct {
+type ECode struct {
     Code    int
     Message string
 }
 
 var (
-    INVALID_TOKEN_PARAMS = &ecode{5000, "缺少token参数"}
-    PARSE_TOKEN_ERROR    = &ecode{5001, "解析token出错"}
-    TOKEN_EXPIRE_TIME    = &ecode{5002, "token以过期"}
+    _ecode = map[int]ECode{} // register ecode
 )
+
+func NewECode(code int, msg string) ECode {
+    eCode := ECode{
+        Code:    code,
+        Message: msg,
+    }
+
+    _ecode[code] = eCode
+
+    return eCode
+}
+
+func GetECode(code int) string {
+    msg, ok := _ecode[code]
+    if !ok {
+        return ""
+    }
+
+    return msg.Message
+}
