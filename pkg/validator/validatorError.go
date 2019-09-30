@@ -1,16 +1,16 @@
-package tools
+package validator
 
 import (
     "github.com/go-playground/universal-translator"
     "gopkg.in/go-playground/validator.v9"
 )
 
-type ValidatorCommonError struct {
+type CommonError struct {
     Errors map[string]interface{}
 }
 
-func GetValidatorError(err error, trans ut.Translator) (res ValidatorCommonError) {
-    res = ValidatorCommonError{}
+func GetValidatorError(err error, trans ut.Translator) (res CommonError) {
+    res = CommonError{}
     res.Errors = make(map[string]interface{})
     errs := err.(validator.ValidationErrors)
 

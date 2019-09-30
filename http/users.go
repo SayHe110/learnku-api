@@ -57,5 +57,6 @@ func userStore(c *gin.Context) {
 }
 
 func userLogin(c *gin.Context) {
-    userSvc.Login()
+    // userRes := &users.UserStoreParam{}
+
 }

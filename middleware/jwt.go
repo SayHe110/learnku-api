@@ -26,7 +26,7 @@ func JWT() gin.HandlerFunc {
         }
 
         if code != http.StatusOK {
-            response.JSON(c, http.StatusOK, ecode.GetECode(code), nil)
+            response.JSON(c, code, ecode.GetECode(code), nil)
 
             c.Abort()
             return

@@ -1,8 +1,7 @@
 package users
 
 import (
-    "learnku-api/config"
-    "learnku-api/tools"
+    validatorPkg "learnku-api/pkg/validator"
     "time"
 )
 
@@ -29,13 +28,11 @@ type UserStoreParam struct {
     RePassword string `form:"re_password" validate:"max=15,min=10,eqfield=Password"`
 }
 
-func (param *UserStoreParam) UserStoreValidator() (valError tools.ValidatorCommonError) {
-    trans, _ := config.Uni.GetTranslator("zh")
-    err := config.Validate.Struct(param)
+type UserLoginParam struct {
+    Email    string `form:"email" binding:"required" validate:"email"`
+    Password string `form:"password" binding:"required" validate:"max=15,min=10"`
+}
 
-    if err != nil {
-        return tools.GetValidatorError(err, trans)
-    }
-
-    return
+func (param *UserStoreParam) UserStoreValidator() (valError validatorPkg.CommonError) {
+    return validatorPkg.ValParams(param)
 }
