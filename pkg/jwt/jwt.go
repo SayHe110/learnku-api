@@ -11,24 +11,12 @@ import (
 type Claims struct {
     Email    string `json:"email"`
     Password string `json:"password"`
-    // StandardClaims *jwtGo.StandardClaims
     jwtGo.StandardClaims
 }
 
 func GenerateToken(email, password string) (tokenString string, err error) {
     nowTime := time.Now()
     expireTime := nowTime.Add(config.AppConfig.ExpireTime)
-    //
-    //token := jwtGo.New(jwtGo.SigningMethodHS256)
-    //claims := make(jwtGo.MapClaims)
-    //claims["exp"] = expireTime
-    //claims["iat"] = time.Now().Unix()
-    //token.Claims = claims
-    //
-    //if tokenString, err = token.SignedString([]byte(config.AppConfig.JWTSecret)); err != nil {
-    //    return "", err
-    //}
-    //return tokenString, nil
 
     claims := Claims{
         Email:    email,
@@ -49,6 +37,7 @@ func ParseToken(token string) (*Claims, error) {
     tokenClaims, err := jwtGo.ParseWithClaims(token, &Claims{}, func(token *jwtGo.Token) (interface{}, error) {
         return []byte(config.AppConfig.JWTSecret), nil
     })
+
     if tokenClaims != nil {
         if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
             return claims, nil
@@ -56,4 +45,22 @@ func ParseToken(token string) (*Claims, error) {
     }
 
     return nil, err
+}
+
+//TODO 该方法刷新方式为重新创建 token，应该是将之前的 token 增加过期时间，而不是重新给 token，查看文档并没有解决问题
+func RefreshToken(token string) (refreshToken string, err error) {
+    tokenClaims, err := jwtGo.ParseWithClaims(token, &Claims{}, func(token *jwtGo.Token) (interface{}, error) {
+        return []byte(config.AppConfig.JWTSecret), nil
+    })
+
+    if tokenClaims != nil {
+        if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
+            // claims.StandardClaims.ExpiresAt = time.Now().Add(config.AppConfig.ExpireTime).Unix()
+            refreshToken, err = GenerateToken(claims.Email, claims.Email)
+
+            return
+        }
+    }
+
+    return "", err
 }

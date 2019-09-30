@@ -3,6 +3,7 @@ package http
 import (
     "github.com/gin-gonic/gin"
     "learnku-api/model/users"
+    "learnku-api/pkg/ecode"
     "learnku-api/pkg/jwt"
     "learnku-api/pkg/response"
     userSvc "learnku-api/service/users"
@@ -12,6 +13,17 @@ import (
 func userList(c *gin.Context) {
     res, _ := userSvc.Users()
     response.JSON(c, http.StatusOK, "获取成功", res)
+}
+
+func userRefreshToken(c *gin.Context) {
+    token, err := jwt.RefreshToken(c.Request.Header.Get("token"))
+    if err != nil {
+        response.JSON(c, ecode.RefreshTokenError.Code, ecode.RefreshTokenError.Message, nil)
+    }
+
+    response.JSON(c, http.StatusOK, "刷新token成功", gin.H{
+        "token": token,
+    })
 }
 
 func userStore(c *gin.Context) {
