@@ -74,6 +74,14 @@ func userLogin(c *gin.Context) {
         return
     }
 
-    response.JSON(c, http.StatusOK, "登录成功", nil)
+    gerToken, err := jwt.GenerateToken(userRes.Email, userRes.Password)
+    if err != nil {
+        response.JSON(c, 50004, "生成 token 错误", err.Error())
+        return
+    }
+
+    response.JSON(c, http.StatusOK, "登录成功", gin.H{
+        "token": gerToken,
+    })
     return
 }
