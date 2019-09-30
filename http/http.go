@@ -40,7 +40,12 @@ func initRouter(e *gin.Engine) {
             root.POST("/login", userLogin)
         }
 
+        // users
         users := api.Group("/users")
+        // don't need auth middleware
+        {
+            //
+        }
         // auth middleware
         users.Use(middleware.JWT())
         {
