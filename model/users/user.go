@@ -1,7 +1,6 @@
 package users
 
 import (
-    "gopkg.in/go-playground/validator.v9"
     "learnku-api/config"
     "learnku-api/tools"
     "time"
@@ -32,8 +31,6 @@ type UserStoreParam struct {
 
 func (param *UserStoreParam) UserStoreValidator() (valError tools.ValidatorCommonError) {
     trans, _ := config.Uni.GetTranslator("zh")
-    // _ = validate.RegisterValidation("pwd_val", ValidatePwd)
-
     err := config.Validate.Struct(param)
 
     if err != nil {
@@ -41,8 +38,4 @@ func (param *UserStoreParam) UserStoreValidator() (valError tools.ValidatorCommo
     }
 
     return
-}
-
-func ValidatePwd(fl validator.FieldLevel) bool {
-    return fl.Field().String() == "pwd"
 }

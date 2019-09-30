@@ -6,8 +6,6 @@ import (
     "time"
 )
 
-// var jwtSecret = []byte(config.AppConfig.JWTSecret)
-
 type Claims struct {
     Email    string `json:"email"`
     Password string `json:"password"`
@@ -55,7 +53,6 @@ func RefreshToken(token string) (refreshToken string, err error) {
 
     if tokenClaims != nil {
         if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
-            // claims.StandardClaims.ExpiresAt = time.Now().Add(config.AppConfig.ExpireTime).Unix()
             refreshToken, err = GenerateToken(claims.Email, claims.Email)
 
             return
