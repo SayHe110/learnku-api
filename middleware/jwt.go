@@ -12,7 +12,7 @@ import (
 func JWT() gin.HandlerFunc {
     return func(c *gin.Context) {
         code := http.StatusOK
-        token := c.Query("token")
+        token := c.Request.Header.Get("token")
 
         if token == "" {
             code = ecode.InvalidTokenParams.Code
