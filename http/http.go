@@ -37,7 +37,7 @@ func initRouter(e *gin.Engine) {
         {
             root.POST("/register", userStore)
             root.GET("/refresh_token", userRefreshToken)
-            root.GET("/login", userLogin)
+            root.POST("/login", userLogin)
         }
 
         users := api.Group("/users")

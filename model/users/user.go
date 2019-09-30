@@ -36,3 +36,7 @@ type UserLoginParam struct {
 func (param *UserStoreParam) UserStoreValidator() (valError validatorPkg.CommonError) {
     return validatorPkg.ValParams(param)
 }
+
+func (param *UserLoginParam) UserLoginValidator() (valError validatorPkg.CommonError) {
+    return validatorPkg.ValParams(param)
+}

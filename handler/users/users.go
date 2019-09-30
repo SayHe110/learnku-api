@@ -3,6 +3,7 @@ package users
 import (
     "learnku-api/bootstrap"
     userModel "learnku-api/model/users"
+    "learnku-api/pkg/auth"
     "log"
     "time"
 )
@@ -25,4 +26,29 @@ func StoreUser(param *userModel.UserStoreParam) (err error) {
         return
     }
     return
+}
+
+func LoginCheckEmail(param *userModel.UserLoginParam) (res bool, err error) {
+    resCount := 0
+    if err = bootstrap.DB.Self.Model(&userModel.Users{}).Where("email = ?", param.Email).Count(&resCount).Error; err != nil {
+        return false, err
+    }
+
+    if resCount > 0 {
+        return true, nil
+    }
+    return false, nil
+}
+
+func LoginByEmail(param *userModel.UserLoginParam) (res bool, err error) {
+    user := &userModel.Users{}
+
+    if err = bootstrap.DB.Self.Where("email = ?", param.Email).First(&user).Error; err != nil {
+        return false, nil
+    }
+
+    if ok, _ := auth.DecodePwd(user.Password, param.Password); ok {
+        return true, nil
+    }
+    return false, nil
 }

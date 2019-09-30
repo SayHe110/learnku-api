@@ -16,6 +16,10 @@ func EncodePwd(pwd string) (string, error) {
     return string(hashPwd), nil
 }
 
-func DecodePwd(pwd string) (bool, error) {
+func DecodePwd(hashPwd,pwd string) (bool, error) {
+    if err:= bcrypt.CompareHashAndPassword([]byte(hashPwd),[]byte(pwd)); err !=nil {
+        return false, nil
+    }
+
     return true, nil
 }

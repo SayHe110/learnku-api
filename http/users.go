@@ -57,6 +57,23 @@ func userStore(c *gin.Context) {
 }
 
 func userLogin(c *gin.Context) {
-    // userRes := &users.UserStoreParam{}
+    userRes := &users.UserLoginParam{}
 
+    if err := c.ShouldBind(&userRes); err != nil {
+        response.JSON(c, 50001, "参数绑定错误", nil)
+        return
+    }
+
+    if err := userRes.UserLoginValidator().Errors; err != nil {
+        response.JSON(c, 50002, "参数验证错误", userRes.UserLoginValidator())
+        return
+    }
+
+    if err := userSvc.Login(userRes); err != nil {
+        response.JSON(c, 50003, err.Error(), nil)
+        return
+    }
+
+    response.JSON(c, http.StatusOK, "登录成功", nil)
+    return
 }

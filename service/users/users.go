@@ -1,6 +1,7 @@
 package users
 
 import (
+    "errors"
     usersHandle "learnku-api/handler/users"
     "learnku-api/model/users"
     "learnku-api/pkg/auth"
@@ -33,6 +34,14 @@ func Store(param *users.UserStoreParam) (err error) {
     return
 }
 
-func Login() {
+func Login(param *users.UserLoginParam) error {
+    if ok, _ := usersHandle.LoginCheckEmail(param); !ok {
+        return errors.New("该邮箱不存在或者不正确")
+    }
 
+    if ok, _ := usersHandle.LoginByEmail(param); !ok {
+        return errors.New("密码不正确")
+    }
+
+    return nil
 }
