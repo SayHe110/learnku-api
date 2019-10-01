@@ -1,8 +1,11 @@
 package topics
 
-import topicsSvc "learnku-api/handler/topics"
+import (
+    topicsSvc "learnku-api/handler/topics"
+    "learnku-api/model/topics"
+)
 
-func Topics() (res []struct{}, err error) {
+func Topics() (res []*topics.Topics, err error) {
     res, err = topicsSvc.GetTopicList()
     return
 }

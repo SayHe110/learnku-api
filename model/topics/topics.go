@@ -16,7 +16,7 @@ type Topics struct {
     Order           string    `json:"order"`
     Excerpt         string    `json:"excerpt"`
     Slug            string    `json:"slug"`
-    CreatedAt       time.Time `json:"created_at"`
+    CreatedAt       string `json:"created_at"`
     UpdatedAt       time.Time `json:"updated_at"`
-    DeletedAt       time.Time `json:"deleted_at"`
+    // DeletedAt       time.Time `json:"deleted_at"`
 }
