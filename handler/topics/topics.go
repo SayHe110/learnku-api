@@ -13,7 +13,7 @@ func GetTopicList() (res []*topics.Topics, err error) {
     //    return nil, err
     //}
 
-    if err = bootstrap.DB.Self.Where("deleted_at = 0").Find(&res).Error; err != nil {
+    if err = bootstrap.DB.Self.Find(&res).Error; err != nil {
         return nil, err
     }
 
