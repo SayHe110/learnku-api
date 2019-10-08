@@ -62,7 +62,17 @@ func initRouter(e *gin.Engine) {
         // auth middleware
         topics.Use(middleware.JWT())
         {
-            //
+            // topics.POST("/store", topicsStore)
+        }
+
+        // categories
+        categories := api.Group("/categories")
+        {
+            categories.GET("/", categoriesList)
+        }
+        categories.Use(middleware.JWT())
+        {
+            categories.POST("/store", categoriesStore)
         }
     }
 }
