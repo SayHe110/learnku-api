@@ -57,6 +57,7 @@ func initRouter(e *gin.Engine) {
         // don't need auth middleware
         {
             topics.GET("/", topicsList)
+            topics.GET("/:id", topicsById)
         }
         // auth middleware
         topics.Use(middleware.JWT())

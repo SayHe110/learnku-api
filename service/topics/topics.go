@@ -9,3 +9,8 @@ func Topics() (res []*topics.Topics, err error) {
     res, err = topicsSvc.GetTopicList()
     return
 }
+
+func TopicsById(id string) (res []*topics.Topics, err error) {
+    res, err = topicsSvc.GetTopicById(id)
+    return
+}
