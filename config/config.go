@@ -14,21 +14,15 @@ const (
     CONFIGFILETYPE = "yaml"
 )
 
-type Config struct {
+type
+Config struct {
     AppConfig *appConfig
     DBConfig  *dbConfig
     Uni       *ut.UniversalTranslator
     Validate  *validator.Validate
 }
 
-var C *Config
-
-//var (
-//    AppConfig *appConfig
-//    DBConfig  *dbConfig
-//    Uni       *ut.UniversalTranslator
-//    Validate  *validator.Validate
-//)
+var C = &Config{}
 
 func Init(filename string) {
     if filename == "" {

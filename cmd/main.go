@@ -15,5 +15,5 @@ func main() {
     bootstrap.SetupDB()
     defer bootstrap.DB.CloseDB()
 
-    http.Init()
+    http.Init(config.C)
 }

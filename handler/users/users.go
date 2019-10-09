@@ -1,9 +1,12 @@
 package users
 
 import (
+    "github.com/jinzhu/gorm"
     "learnku-api/bootstrap"
+    "learnku-api/config"
     userModel "learnku-api/model/users"
     "learnku-api/pkg/auth"
+    "learnku-api/pkg/db"
     "log"
     "time"
 )
@@ -12,7 +15,19 @@ const (
     _userStoreSQL = `INSERT INTO users(email, password, created_at) VALUES(?,?,?)`
 )
 
-func GetUserList() (res []*userModel.Users, err error) {
+type Handler struct {
+    db *gorm.DB
+}
+
+func New(c *config.Config) (h *Handler) {
+    h = &Handler{
+        db: db.NewMysql(c),
+    }
+
+    return
+}
+
+func (h *Handler) GetUserList() (res []*userModel.Users, err error) {
     if err = bootstrap.DB.Self.Limit(2).Offset(0).Find(&res).Error; err != nil {
         log.Printf("select users field (%v)", err)
         return nil, err

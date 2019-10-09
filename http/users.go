@@ -7,16 +7,12 @@ import (
     "learnku-api/pkg/ecode"
     "learnku-api/pkg/jwt"
     "learnku-api/pkg/response"
-    userSvc "learnku-api/service/users"
-    "log"
     "net/http"
 )
 
 func userList(c *gin.Context) {
-    res, _ := c.Get("UserInfo")
-    log.Println(res)
-    //res, _ := userSvc.Users()
-    //response.JSON(c, http.StatusOK, "获取成功", res)
+    res, _ := userSvc.Users()
+    response.JSON(c, http.StatusOK, "获取成功", res)
 }
 
 func userRefreshToken(c *gin.Context) {

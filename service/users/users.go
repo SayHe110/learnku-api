@@ -2,13 +2,26 @@ package users
 
 import (
     "errors"
+    "learnku-api/config"
     usersHandle "learnku-api/handler/users"
     "learnku-api/model/users"
     "learnku-api/pkg/auth"
 )
 
-func Users() (res []*users.Users, err error) {
-    res, err = usersHandle.GetUserList()
+type Service struct {
+    handler *usersHandle.Handler
+}
+
+func New(c *config.Config) (s *Service) {
+    s = &Service{
+        handler: usersHandle.New(c),
+    }
+
+    return
+}
+
+func (s *Service) Users() (res []*users.Users, err error) {
+    res, err = s.handler.GetUserList()
     if err != nil {
         return nil, err
     }
@@ -16,7 +29,7 @@ func Users() (res []*users.Users, err error) {
     return
 }
 
-func Store(param *users.UserStoreParam) (err error) {
+func (s *Service) Store(param *users.UserStoreParam) (err error) {
     hashPwd, err := auth.EncodePwd(param.Password)
     if err != nil {
         return err
@@ -34,7 +47,7 @@ func Store(param *users.UserStoreParam) (err error) {
     return
 }
 
-func Login(param *users.UserLoginParam) (*users.Users, error) {
+func (s *Service) Login(param *users.UserLoginParam) (*users.Users, error) {
     if ok, _ := usersHandle.LoginCheckEmail(param); !ok {
         return nil, errors.New("该邮箱不存在或者不正确")
     }

@@ -7,6 +7,7 @@ import (
     "io"
     "learnku-api/config"
     "learnku-api/middleware"
+    userService "learnku-api/service/users"
     "log"
     "os"
 )
@@ -16,7 +17,11 @@ const (
     LogFilePath = "./runtime/log/"
 )
 
-func Init() {
+var (
+    userSvc *userService.Service
+)
+
+func Init(c *config.Config) {
     file, _ := os.Create(LogFilePath + "gin.log")
     gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
 
@@ -28,12 +33,17 @@ func Init() {
 
     gin.SetMode(config.C.AppConfig.Runmode)
 
+    initService(c)
     initRouter(engine)
 
     if err := engine.Run(config.C.AppConfig.Url); err != nil {
         log.Printf("engine.Start error(%v)", err)
         panic(err)
     }
+}
+
+func initService(c *config.Config) {
+    userSvc = userService.New(c)
 }
 
 func initRouter(e *gin.Engine) {
