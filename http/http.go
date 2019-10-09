@@ -90,7 +90,7 @@ func initRouter(e *gin.Engine) {
         // categories
         categories := api.Group("/categories")
         {
-            categories.GET("/", categoriesList)
+            categories.GET("", categoriesList)
         }
         categories.Use(middleware.AuthSessionMiddle())
         {

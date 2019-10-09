@@ -3,7 +3,7 @@ package categories
 import (
     "learnku-api/config"
     categoriesHandle "learnku-api/handler/categories"
-    "learnku-api/model/categories"
+    categoryModel "learnku-api/model/categories"
 )
 
 type Service struct {
@@ -18,10 +18,16 @@ func New(c *config.Config) (s *Service) {
     return
 }
 
-func (s *Service) Store(params categories.CategoryParams) (err error) {
-    if err = categoriesHandle.Store(params); err != nil {
-        return err
+func (s *Service) Store(params *categoryModel.CategoryParams) (err error) {
+    if err = s.handler.Store(params); err != nil {
+        return
     }
 
     return nil
+}
+
+func (s *Service) List() (res []*categoryModel.Categories, err error) {
+    res, err = s.handler.List()
+
+    return
 }

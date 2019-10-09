@@ -2,18 +2,23 @@ package http
 
 import (
     "github.com/gin-gonic/gin"
-    categoriesSvc "learnku-api/handler/categories"
     "learnku-api/model/categories"
     "learnku-api/pkg/response"
     "net/http"
 )
 
 func categoriesList(ctx *gin.Context) {
+    res, err := categorySvc.List()
+    if err != nil {
+        response.JSON(ctx, 50001, "获取列表错误", err.Error())
+        return
+    }
 
+    response.JSON(ctx, http.StatusOK, "获取列表成功", res)
 }
 
 func categoriesStore(ctx *gin.Context) {
-    categoryParams := categories.CategoryParams{}
+    categoryParams := &categories.CategoryParams{}
 
     if err := ctx.ShouldBind(&categoryParams); err != nil {
         response.JSON(ctx, 50001, "参数绑定错误", nil)
@@ -25,7 +30,7 @@ func categoriesStore(ctx *gin.Context) {
         return
     }
 
-    if err := categoriesSvc.Store(categoryParams); err != nil {
+    if err := categorySvc.Store(categoryParams); err != nil {
         response.JSON(ctx, 50003, "创建失败", err.Error())
         return
     }

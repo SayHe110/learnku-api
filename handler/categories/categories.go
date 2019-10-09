@@ -2,9 +2,8 @@ package categories
 
 import (
     "github.com/jinzhu/gorm"
-    "learnku-api/bootstrap"
     "learnku-api/config"
-    "learnku-api/model/categories"
+    categoryModel "learnku-api/model/categories"
     "learnku-api/pkg/db"
     "time"
 )
@@ -21,12 +20,20 @@ func New(c *config.Config) (h *Handler) {
     return
 }
 
-func Store(params categories.CategoryParams) (err error) {
+func (h *Handler) Store(params *categoryModel.CategoryParams) (err error) {
     params.CreatedAt = time.Now().Unix()
 
-    if err = bootstrap.DB.Self.Table("categories").Create(&params).Error; err != nil {
+    if err = h.db.Table("categories").Create(&params).Error; err != nil {
         return
     }
 
     return nil
+}
+
+func (h *Handler) List() (res []*categoryModel.Categories, err error) {
+    if err = h.db.Find(&res).Error; err != nil {
+        return nil, err
+    }
+
+    return
 }
