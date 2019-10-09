@@ -7,6 +7,8 @@ import (
     "io"
     "learnku-api/config"
     "learnku-api/middleware"
+    categoryService "learnku-api/service/categories"
+    topicService "learnku-api/service/topics"
     userService "learnku-api/service/users"
     "log"
     "os"
@@ -18,7 +20,9 @@ const (
 )
 
 var (
-    userSvc *userService.Service
+    userSvc   *userService.Service
+    topicsSvc *topicService.Service
+    categorySvc *categoryService.Service
 )
 
 func Init(c *config.Config) {
@@ -44,6 +48,8 @@ func Init(c *config.Config) {
 
 func initService(c *config.Config) {
     userSvc = userService.New(c)
+    topicsSvc = topicService.New(c)
+    categorySvc = categoryService.New(c)
 }
 
 func initRouter(e *gin.Engine) {

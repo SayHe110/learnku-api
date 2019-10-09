@@ -1,16 +1,29 @@
 package topics
 
 import (
-    topicsSvc "learnku-api/handler/topics"
+    "learnku-api/config"
+    topicsHandler "learnku-api/handler/topics"
     "learnku-api/model/topics"
 )
 
-func Topics() (res []*topics.Topics, err error) {
-    res, err = topicsSvc.GetTopicList()
+type Service struct {
+    handler *topicsHandler.Handler
+}
+
+func New(c *config.Config) (s *Service) {
+    s = &Service{
+        handler: topicsHandler.New(c),
+    }
+
     return
 }
 
-func TopicsById(id string) (res []*topics.Topics, err error) {
-    res, err = topicsSvc.GetTopicById(id)
+func (s *Service) GetTopicsList() (res []*topics.Topics, err error) {
+    res, err = s.handler.GetTopicList()
+    return
+}
+
+func (s *Service) GetTopicsById(id string) (res []*topics.Topics, err error) {
+    res, err = s.handler.GetTopicById(id)
     return
 }

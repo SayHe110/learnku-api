@@ -1,20 +1,34 @@
 package topics
 
 import (
-    "learnku-api/bootstrap"
+    "github.com/jinzhu/gorm"
+    "learnku-api/config"
     "learnku-api/model/topics"
+    "learnku-api/pkg/db"
 )
 
-func GetTopicList() (res []*topics.Topics, err error) {
-    if err = bootstrap.DB.Self.Preload("UserInfo").Find(&res).Error; err != nil {
+type Handler struct {
+    db *gorm.DB
+}
+
+func New(c *config.Config) (h *Handler) {
+    h = &Handler{
+        db: db.NewMysql(c),
+    }
+
+    return
+}
+
+func (h *Handler) GetTopicList() (res []*topics.Topics, err error) {
+    if err = h.db.Preload("UserInfo").Find(&res).Error; err != nil {
         return nil, err
     }
 
     return
 }
 
-func GetTopicById(id string) (res []*topics.Topics, err error) {
-    if err = bootstrap.DB.Self.Where("id = ?", id).Preload("UserInfo").Find(&res).Error; err != nil {
+func (h *Handler) GetTopicById(id string) (res []*topics.Topics, err error) {
+    if err = h.db.Where("id = ?", id).Preload("UserInfo").Find(&res).Error; err != nil {
         return nil, err
     }
 

@@ -40,7 +40,7 @@ func (s *Service) Store(param *users.UserStoreParam) (err error) {
         Password: hashPwd,
     }
 
-    if err = usersHandle.StoreUser(storeParams); err != nil {
+    if err = s.handler.StoreUser(storeParams); err != nil {
         return err
     }
 
@@ -48,11 +48,11 @@ func (s *Service) Store(param *users.UserStoreParam) (err error) {
 }
 
 func (s *Service) Login(param *users.UserLoginParam) (*users.Users, error) {
-    if ok, _ := usersHandle.LoginCheckEmail(param); !ok {
+    if ok, _ := s.handler.LoginCheckEmail(param); !ok {
         return nil, errors.New("该邮箱不存在或者不正确")
     }
 
-    ok, user, _ := usersHandle.LoginByEmail(param);
+    ok, user, _ := s.handler.LoginByEmail(param);
     if !ok {
         return nil, errors.New("密码不正确")
     }
