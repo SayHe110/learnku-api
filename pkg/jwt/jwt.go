@@ -14,26 +14,26 @@ type Claims struct {
 
 func GenerateToken(email, password string) (tokenString string, err error) {
     nowTime := time.Now()
-    expireTime := nowTime.Add(config.AppConfig.ExpireTime)
+    expireTime := nowTime.Add(config.C.AppConfig.ExpireTime)
 
     claims := Claims{
         Email:    email,
         Password: password,
         StandardClaims: jwtGo.StandardClaims{
             ExpiresAt: expireTime.Unix(),
-            Issuer:    config.AppConfig.Name,
+            Issuer:    config.C.AppConfig.Name,
         },
     }
 
     tokenClaims := jwtGo.NewWithClaims(jwtGo.SigningMethodHS256, claims)
-    token, err := tokenClaims.SignedString([]byte(config.AppConfig.JWTSecret))
+    token, err := tokenClaims.SignedString([]byte(config.C.AppConfig.JWTSecret))
 
     return token, err
 }
 
 func ParseToken(token string) (*Claims, error) {
     tokenClaims, err := jwtGo.ParseWithClaims(token, &Claims{}, func(token *jwtGo.Token) (interface{}, error) {
-        return []byte(config.AppConfig.JWTSecret), nil
+        return []byte(config.C.AppConfig.JWTSecret), nil
     })
 
     if tokenClaims != nil {
@@ -48,7 +48,7 @@ func ParseToken(token string) (*Claims, error) {
 //TODO 该方法刷新方式为重新创建 token，应该是将之前的 token 增加过期时间，而不是重新给 token，查看文档并没有解决问题
 func RefreshToken(token string) (refreshToken string, err error) {
     tokenClaims, err := jwtGo.ParseWithClaims(token, &Claims{}, func(token *jwtGo.Token) (interface{}, error) {
-        return []byte(config.AppConfig.JWTSecret), nil
+        return []byte(config.C.AppConfig.JWTSecret), nil
     })
 
     if tokenClaims != nil {

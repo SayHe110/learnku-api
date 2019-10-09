@@ -16,10 +16,10 @@ var DB *Database
 
 func SetupDB() {
     sourceDB := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s",
-        config.DBConfig.Username,
-        config.DBConfig.Password,
-        config.DBConfig.Addr,
-        config.DBConfig.Name,
+        config.C.DBConfig.Username,
+        config.C.DBConfig.Password,
+        config.C.DBConfig.Addr,
+        config.C.DBConfig.Name,
         true,
         "Local")
 

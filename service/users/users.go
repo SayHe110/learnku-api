@@ -34,14 +34,15 @@ func Store(param *users.UserStoreParam) (err error) {
     return
 }
 
-func Login(param *users.UserLoginParam) error {
+func Login(param *users.UserLoginParam) (*users.Users, error) {
     if ok, _ := usersHandle.LoginCheckEmail(param); !ok {
-        return errors.New("该邮箱不存在或者不正确")
+        return nil, errors.New("该邮箱不存在或者不正确")
     }
 
-    if ok, _ := usersHandle.LoginByEmail(param); !ok {
-        return errors.New("密码不正确")
+    ok, user, _ := usersHandle.LoginByEmail(param);
+    if !ok {
+        return nil, errors.New("密码不正确")
     }
 
-    return nil
+    return user, nil
 }

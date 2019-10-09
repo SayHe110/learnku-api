@@ -3,16 +3,20 @@ package http
 import (
     "github.com/gin-gonic/gin"
     "learnku-api/model/users"
+    "learnku-api/pkg/auth"
     "learnku-api/pkg/ecode"
     "learnku-api/pkg/jwt"
     "learnku-api/pkg/response"
     userSvc "learnku-api/service/users"
+    "log"
     "net/http"
 )
 
 func userList(c *gin.Context) {
-    res, _ := userSvc.Users()
-    response.JSON(c, http.StatusOK, "获取成功", res)
+    res, _ := c.Get("UserInfo")
+    log.Println(res)
+    //res, _ := userSvc.Users()
+    //response.JSON(c, http.StatusOK, "获取成功", res)
 }
 
 func userRefreshToken(c *gin.Context) {
@@ -69,7 +73,8 @@ func userLogin(c *gin.Context) {
         return
     }
 
-    if err := userSvc.Login(userRes); err != nil {
+    user, err := userSvc.Login(userRes);
+    if  err != nil {
         response.JSON(c, 50003, err.Error(), nil)
         return
     }
@@ -79,6 +84,9 @@ func userLogin(c *gin.Context) {
         response.JSON(c, 50004, "生成 token 错误", err.Error())
         return
     }
+
+    // set session
+    auth.SaveAuthSession(c, user)
 
     response.JSON(c, http.StatusOK, "登录成功", gin.H{
         "token": gerToken,

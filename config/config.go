@@ -14,12 +14,21 @@ const (
     CONFIGFILETYPE = "yaml"
 )
 
-var (
+type Config struct {
     AppConfig *appConfig
     DBConfig  *dbConfig
     Uni       *ut.UniversalTranslator
     Validate  *validator.Validate
-)
+}
+
+var C *Config
+
+//var (
+//    AppConfig *appConfig
+//    DBConfig  *dbConfig
+//    Uni       *ut.UniversalTranslator
+//    Validate  *validator.Validate
+//)
 
 func Init(filename string) {
     if filename == "" {
@@ -34,15 +43,22 @@ func Init(filename string) {
         panic(err)
     }
 
-    AppConfig = initAppConfig()
-    DBConfig = initDbConfig()
+    appConfig := initAppConfig()
+    dbConfig := initDbConfig()
 
     // validator v9 config register // TODO 这里处理不好，应该将语言配置为全局的，而不是每次用的时候 get 一下
-    Uni = ut.New(zh.New(), zh.New())
+    uni := ut.New(zh.New(), zh.New())
 
     viper.SetDefault("LANGUAGE", "zh")
-    validateTrans, _ := Uni.GetTranslator(viper.GetString("LANGUAGE"))
+    validateTrans, _ := uni.GetTranslator(viper.GetString("LANGUAGE"))
 
-    Validate = validator.New()
-    _ = zhTranslations.RegisterDefaultTranslations(Validate, validateTrans)
+    validate := validator.New()
+    _ = zhTranslations.RegisterDefaultTranslations(validate, validateTrans)
+
+    C = &Config{
+        AppConfig: appConfig,
+        DBConfig:  dbConfig,
+        Uni:       uni,
+        Validate:  validate,
+    }
 }

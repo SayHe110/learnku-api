@@ -1,6 +1,8 @@
 package http
 
 import (
+    "github.com/gin-contrib/sessions"
+    "github.com/gin-contrib/sessions/cookie"
     "github.com/gin-gonic/gin"
     "io"
     "learnku-api/config"
@@ -20,11 +22,15 @@ func Init() {
 
     engine := gin.Default()
 
-    gin.SetMode(config.AppConfig.Runmode)
+    // session
+    sessionStore := cookie.NewStore([]byte("secret"))
+    engine.Use(sessions.Sessions(config.C.AppConfig.Name, sessionStore))
+
+    gin.SetMode(config.C.AppConfig.Runmode)
 
     initRouter(engine)
 
-    if err := engine.Run(config.AppConfig.Url); err != nil {
+    if err := engine.Run(config.C.AppConfig.Url); err != nil {
         log.Printf("engine.Start error(%v)", err)
         panic(err)
     }
@@ -47,7 +53,7 @@ func initRouter(e *gin.Engine) {
             //
         }
         // auth middleware
-        users.Use(middleware.JWT())
+        // users.Use(middleware.JWT())
         {
             users.GET("/", userList)
         }
@@ -70,7 +76,7 @@ func initRouter(e *gin.Engine) {
         {
             categories.GET("/", categoriesList)
         }
-        categories.Use(middleware.JWT())
+        categories.Use(middleware.AuthSessionMiddle())
         {
             categories.POST("/store", categoriesStore)
         }

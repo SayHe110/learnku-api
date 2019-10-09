@@ -40,15 +40,15 @@ func LoginCheckEmail(param *userModel.UserLoginParam) (res bool, err error) {
     return false, nil
 }
 
-func LoginByEmail(param *userModel.UserLoginParam) (res bool, err error) {
-    user := &userModel.Users{}
+func LoginByEmail(param *userModel.UserLoginParam) (res bool, user *userModel.Users, err error) {
+    user = &userModel.Users{}
 
     if err = bootstrap.DB.Self.Where("email = ?", param.Email).First(&user).Error; err != nil {
-        return false, nil
+        return false, nil, nil
     }
 
     if ok, _ := auth.DecodePwd(user.Password, param.Password); ok {
-        return true, nil
+        return true, user, nil
     }
-    return false, nil
+    return false, nil, nil
 }
