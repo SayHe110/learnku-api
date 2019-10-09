@@ -15,11 +15,11 @@ type Categories struct {
 }
 
 type CategoryParams struct {
-    Name        string `form:"name" binding:"required" validate:"max=25,min=10"`
+    Name        string `form:"name" binding:"required" validate:"max=25,min=10,filed_unique"`
     Description string `form:"description" binding:"required"`
     CreatedAt   int64
 }
 
 func (params *CategoryParams) CategoryStoreValidator() (valError validatorPkg.CommonError) {
-    return validatorPkg.ValParams(params)
+    return validatorPkg.CustomValParams(params, validatorPkg.FiledValUnique, "filed_unique", "categories")
 }

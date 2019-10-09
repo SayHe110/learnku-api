@@ -64,11 +64,9 @@ func initRouter(e *gin.Engine) {
 
         // users
         users := api.Group("/users")
-        // don't need auth middleware
         {
             //
         }
-        // auth middleware
         // users.Use(middleware.JWT())
         {
             users.GET("/", userList)
@@ -76,12 +74,10 @@ func initRouter(e *gin.Engine) {
 
         // topics
         topics := api.Group("/topics")
-        // don't need auth middleware
         {
             topics.GET("/", topicsList)
             topics.GET("/:id", topicsById)
         }
-        // auth middleware
         topics.Use(middleware.JWT())
         {
             // topics.POST("/store", topicsStore)

@@ -1,12 +1,9 @@
 package middleware
 
 import (
-    "encoding/json"
     "github.com/gin-contrib/sessions"
     "github.com/gin-gonic/gin"
-    "learnku-api/model/users"
     "learnku-api/pkg/response"
-    "log"
     "net/http"
 )
 
@@ -25,9 +22,9 @@ func AuthSessionMiddle() gin.HandlerFunc {
 
         // ctx.Set("UserInfo", json.Unmarshal(sessionValue, &users.Users{}))
         // res := session.Get("UserInfo")
-        user := &users.Users{}
-        _ = json.Unmarshal(sessionValue, user)
-        log.Println(user)
+        //user := &users.Users{}
+        //_ = json.Unmarshal(sessionValue, user)
+        //log.Println(user)
         ctx.Next()
     }
 }
