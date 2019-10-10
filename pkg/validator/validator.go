@@ -21,7 +21,7 @@ func ValParams(params interface{}) (valError CommonError) {
     return
 }
 
-func CustomValParams(params interface{}, customFunc validator.Func, tagName, tableName string, ) (valError CommonError) {
+func CustomValParams(params interface{}, customFunc validator.Func, tagName, tableName string) (valError CommonError) {
     tableNameVar = tableName
 
     trans, _ := config.C.Uni.GetTranslator("zh")
