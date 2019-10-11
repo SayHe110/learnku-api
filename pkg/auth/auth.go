@@ -2,7 +2,6 @@ package auth
 
 import (
     "encoding/json"
-    "github.com/gin-contrib/sessions"
     "github.com/gin-gonic/gin"
     "golang.org/x/crypto/bcrypt"
     userModel "learnku-api/model/users"
@@ -29,9 +28,11 @@ func DecodePwd(hashPwd, pwd string) (bool, error) {
 }
 
 func SaveAuthSession(ctx *gin.Context, users *userModel.Users) {
-    session := sessions.Default(ctx)
-    seVal, _ := json.Marshal(users)
+    userStr, _ := json.Marshal(users)
 
-    session.Set("UserInfo", seVal) // TODO 是否设置过期时间
-    _ = session.Save()
+    ctx.SetCookie("UserInfo", string(userStr), 3600, "/", "localhost", false, true)
+}
+
+func ClearAuthSession(ctx *gin.Context) {
+    ctx.SetCookie("UserInfo", "", -1, "/", "localhost", false, true)
 }

@@ -67,7 +67,7 @@ func initRouter(e *gin.Engine) {
         }
 
         // communities
-        communities := api.Group("/communities")
+        communities := api.Group("/communities", middleware.AuthSessionMiddle())
         {
             communities.GET("", communityList)
             communities.PATCH("/update", communityUpdate)
@@ -76,11 +76,11 @@ func initRouter(e *gin.Engine) {
         // users
         users := api.Group("/users")
         {
-            //
-        }
-        // users.Use(middleware.JWT())
-        {
             users.GET("/", userList)
+        }
+        users.Use(middleware.AuthSessionMiddle())
+        {
+            users.GET("/logout", userLogout)
         }
 
         // topics

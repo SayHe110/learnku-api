@@ -15,6 +15,11 @@ func userList(c *gin.Context) {
     response.JSON(c, http.StatusOK, "获取成功", res)
 }
 
+func userLogout(c *gin.Context) {
+    auth.ClearAuthSession(c)
+    response.JSON(c, http.StatusNoContent, "退出成功", nil)
+}
+
 func userRefreshToken(c *gin.Context) {
     token, err := jwt.RefreshToken(c.Request.Header.Get("token"))
     if err != nil {
@@ -70,7 +75,7 @@ func userLogin(c *gin.Context) {
     }
 
     user, err := userSvc.Login(userRes);
-    if  err != nil {
+    if err != nil {
         response.JSON(c, 50003, err.Error(), nil)
         return
     }
