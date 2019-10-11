@@ -7,11 +7,13 @@ import (
     "io"
     "learnku-api/config"
     "learnku-api/middleware"
-    categoryService "learnku-api/service/categories"
-    topicService "learnku-api/service/topics"
-    userService "learnku-api/service/users"
     "log"
     "os"
+
+    categoryService "learnku-api/service/categories"
+    communityService "learnku-api/service/communities"
+    topicService "learnku-api/service/topics"
+    userService "learnku-api/service/users"
 )
 
 const (
@@ -20,9 +22,10 @@ const (
 )
 
 var (
-    userSvc   *userService.Service
-    topicsSvc *topicService.Service
-    categorySvc *categoryService.Service
+    userSvc        *userService.Service
+    topicsSvc      *topicService.Service
+    categorySvc    *categoryService.Service
+    communitiesSvc *communityService.Service
 )
 
 func Init(c *config.Config) {
@@ -50,6 +53,7 @@ func initService(c *config.Config) {
     userSvc = userService.New(c)
     topicsSvc = topicService.New(c)
     categorySvc = categoryService.New(c)
+    communitiesSvc = communityService.New(c)
 }
 
 func initRouter(e *gin.Engine) {
@@ -60,6 +64,13 @@ func initRouter(e *gin.Engine) {
             root.POST("/register", userStore)
             root.GET("/refresh_token", userRefreshToken)
             root.POST("/login", userLogin)
+        }
+
+        // communities
+        communities := api.Group("/communities")
+        {
+            communities.GET("", communityList)
+            communities.PATCH("/update", communityUpdate)
         }
 
         // users

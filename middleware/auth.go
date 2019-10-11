@@ -7,7 +7,7 @@ import (
     "net/http"
 )
 
-//TODO 存入后获取不到，在存入时出错（转换为 string 时）
+// TODO 稍后修改为 Gin 的 cookie
 func AuthSessionMiddle() gin.HandlerFunc {
     return func(ctx *gin.Context) {
         session := sessions.Default(ctx)
@@ -20,11 +20,6 @@ func AuthSessionMiddle() gin.HandlerFunc {
             return
         }
 
-        // ctx.Set("UserInfo", json.Unmarshal(sessionValue, &users.Users{}))
-        // res := session.Get("UserInfo")
-        //user := &users.Users{}
-        //_ = json.Unmarshal(sessionValue, user)
-        //log.Println(user)
         ctx.Next()
     }
 }
