@@ -26,3 +26,15 @@ func (h *Handler) GetList() (res []*commModel.CommCategories, err error) {
 
     return
 }
+
+func (h *Handler) Update(params *commModel.CommunityParams) (err error) {
+    comm := commModel.Communities{}
+    if err = h.db.Model(&comm).Where("id = ?", params.Id).Updates(commModel.Communities{
+        Name:        params.Name,
+        Description: params.Description,
+    }).Error; err != nil {
+        return
+    }
+
+    return nil
+}

@@ -25,3 +25,11 @@ func (s *Service) GetList() (res []*commModel.CommCategories, err error) {
 
     return
 }
+
+func (s *Service) Update(params *commModel.CommunityParams) (err error) {
+    if err = s.handler.Update(params); err != nil {
+        return
+    }
+
+    return nil
+}

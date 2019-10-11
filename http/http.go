@@ -99,7 +99,7 @@ func initRouter(e *gin.Engine) {
         {
             categories.GET("", categoriesList)
         }
-        categories.Use(middleware.AuthSessionMiddle())
+        // categories.Use(middleware.AuthSessionMiddle())
         {
             categories.POST("/store", categoriesStore)
         }
