@@ -3,14 +3,18 @@ module learnku-api
 go 1.13
 
 require (
-	github.com/casbin/casbin/v2 v2.1.0 // indirect
-	github.com/casbin/gorm-adapter/v2 v2.0.3 // indirect
+	github.com/billcobbler/casbin-redis-watcher v0.0.0-20190706023639-52f9bd47d420
+	github.com/casbin/casbin v1.9.1 // indirect
+	github.com/casbin/casbin/v2 v2.1.0
+	github.com/casbin/gorm-adapter/v2 v2.0.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/garyburd/redigo v1.6.0 // indirect
 	github.com/gin-contrib/sessions v0.0.1
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-playground/locales v0.12.1
 	github.com/go-playground/universal-translator v0.16.0
+	github.com/go-sql-driver/mysql v1.4.1
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/jinzhu/gorm v1.9.10
