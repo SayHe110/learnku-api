@@ -1,43 +1,34 @@
 package casbin
 
 import (
-    "github.com/billcobbler/casbin-redis-watcher"
+    "errors"
     "github.com/casbin/casbin/v2"
     "github.com/casbin/gorm-adapter/v2"
     _ "github.com/go-sql-driver/mysql"
     "learnku-api/config"
     "learnku-api/pkg/db"
-    "log"
 )
 
 const (
     _casbinAuthConfigFile = "./pkg/casbin/auth_model.conf"
 )
 
-func Casbin() {
-    w, err := rediswatcher.NewWatcher(config.C.RediesConfig.Addr, rediswatcher.Password(config.C.RediesConfig.Password))
-
+func Enforce(sub, obj, act string) (ok bool, err error) {
+    adapterGorm, err := gormadapter.NewAdapterByDB(db.NewMysql(config.C))
     if err != nil {
-        log.Panic(err.Error())
+        return false, errors.New("新建 Gorm 适配器失败~")
     }
 
-    a, _ := gormadapter.NewAdapterByDB(db.NewMysql(config.C))
-    e, err := casbin.NewEnforcer(_casbinAuthConfigFile, a)
-
-    _ = e.SetWatcher(w)
+    enforce, err := casbin.NewEnforcer(_casbinAuthConfigFile, adapterGorm)
     if err != nil {
-        log.Panic(err)
+        return false, errors.New("casbin 执行失败~")
     }
 
-    if err := e.LoadPolicy(); err != nil {
-       log.Panic(err)
+    err = enforce.LoadPolicy()
+    if err != nil {
+        return false, errors.New("casbin 加载策略失败~")
     }
 
-    _ = w.SetUpdateCallback(func(s string) {
-        log.Println(s)
-    })
-
-    _, _ = e.Enforce("alice", "data1", "read")
-
-    _ = e.SavePolicy()
+    ok, err = enforce.Enforce(sub, obj, act)
+    return
 }
