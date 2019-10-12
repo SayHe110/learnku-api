@@ -1,1 +1,5 @@
 package cache
+
+func RedisCache() {
+
+}

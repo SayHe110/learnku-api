@@ -14,12 +14,12 @@ const (
     CONFIGFILETYPE = "yaml"
 )
 
-type
-Config struct {
-    AppConfig *appConfig
-    DBConfig  *dbConfig
-    Uni       *ut.UniversalTranslator
-    Validate  *validator.Validate
+type Config struct {
+    AppConfig    *appConfig
+    DBConfig     *dbConfig
+    RediesConfig *redisConfig
+    Uni          *ut.UniversalTranslator
+    Validate     *validator.Validate
 }
 
 var C = &Config{}
@@ -39,6 +39,7 @@ func Init(filename string) {
 
     appConfig := initAppConfig()
     dbConfig := initDbConfig()
+    rediesConfig := initRedisConfig()
 
     // validator v9 config register // TODO 这里处理不好，应该将语言配置为全局的，而不是每次用的时候 get 一下
     uni := ut.New(zh.New(), zh.New())
@@ -50,9 +51,10 @@ func Init(filename string) {
     _ = zhTranslations.RegisterDefaultTranslations(validate, validateTrans)
 
     C = &Config{
-        AppConfig: appConfig,
-        DBConfig:  dbConfig,
-        Uni:       uni,
-        Validate:  validate,
+        AppConfig:    appConfig,
+        DBConfig:     dbConfig,
+        RediesConfig: rediesConfig,
+        Uni:          uni,
+        Validate:     validate,
     }
 }
