@@ -3,6 +3,8 @@ module learnku-api
 go 1.13
 
 require (
+	github.com/casbin/casbin/v2 v2.1.0 // indirect
+	github.com/casbin/gorm-adapter/v2 v2.0.3 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/sessions v0.0.1
 	github.com/gin-contrib/sse v0.1.0 // indirect
