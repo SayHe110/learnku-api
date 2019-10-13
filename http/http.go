@@ -67,7 +67,7 @@ func initRouter(e *gin.Engine) {
         }
 
         // communities
-        communities := api.Group("/communities"/*, middleware.AuthSessionMiddle()*/)
+        communities := api.Group("/communities", middleware.AuthSessionMiddle("response", "write"))
         {
             communities.GET("", communityList)
             communities.PATCH("/update", communityUpdate)
