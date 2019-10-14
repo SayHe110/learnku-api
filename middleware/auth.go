@@ -32,7 +32,7 @@ func AuthSessionMiddle(obj, act string) gin.HandlerFunc {
         }
 
         if ! ok {
-            response.JSON(ctx, http.StatusUnauthorized, "用户没有权限", nil)
+            response.JSON(ctx, http.StatusForbidden, "用户没有权限", nil)
             ctx.Abort()
 
             return

@@ -13,6 +13,24 @@ const (
     _casbinAuthConfigFile = "./pkg/casbin/auth_model.conf"
 )
 
+var ResourcesRuleName = &resourcesRuleName{}
+
+type resourcesRuleName struct {
+    Communities string
+    Users       string
+    Topics      string
+    Categories  string
+}
+
+func init() {
+    ResourcesRuleName = &resourcesRuleName{
+        Communities: "communities",
+        Users:       "users",
+        Topics:      "topics",
+        Categories:  "categories",
+    }
+}
+
 func Enforce(sub, obj, act string) (ok bool, err error) {
     adapterGorm, err := gormadapter.NewAdapterByDB(db.NewMysql(config.C))
     if err != nil {

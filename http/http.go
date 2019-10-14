@@ -7,6 +7,7 @@ import (
     "io"
     "learnku-api/config"
     "learnku-api/middleware"
+    casbinPkg "learnku-api/pkg/casbin"
     "log"
     "os"
 
@@ -26,6 +27,10 @@ var (
     topicsSvc      *topicService.Service
     categorySvc    *categoryService.Service
     communitiesSvc *communityService.Service
+)
+
+var (
+    cResRuleName = casbinPkg.ResourcesRuleName
 )
 
 func Init(c *config.Config) {
@@ -101,7 +106,7 @@ func initRouter(e *gin.Engine) {
         }
         // categories.Use(middleware.AuthSessionMiddle())
         {
-            categories.POST("/store", middleware.AuthSessionMiddle("response", "write"), categoriesStore)
+            categories.POST("/store", middleware.AuthSessionMiddle(cResRuleName.Communities, "write"), categoriesStore)
         }
     }
 }
