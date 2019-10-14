@@ -7,6 +7,12 @@ import (
 )
 
 func permissionList(ctx *gin.Context) {
-
-    response.JSON(ctx, http.StatusOK, "成功", nil)
+    //res,err := casbin.CasbinEnforce.GetRolesForUser("1231312a@a.c")
+    //if err != nil {
+    //    response.JSON(ctx, http.StatusInternalServerError, "获取失败", err)
+    //}
+    //log.Println(res)
+    response.JSON(ctx, http.StatusOK, "成功", gin.H{
+        "g": 123,
+    })
 }

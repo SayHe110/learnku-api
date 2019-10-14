@@ -7,6 +7,7 @@ import (
     _ "github.com/go-sql-driver/mysql"
     "learnku-api/config"
     "learnku-api/pkg/db"
+    "log"
 )
 
 const (
@@ -35,7 +36,12 @@ func init() {
 }
 
 func InitCasbinEnforce() {
-    CasbinEnforce, _ = casbinEnforceFun()
+    e, err := casbinEnforceFun()
+    if err != nil {
+        log.Panic(err)
+    }
+
+    CasbinEnforce = e
 }
 
 func Enforce(sub, obj, act string) (ok bool, err error) {
@@ -43,6 +49,9 @@ func Enforce(sub, obj, act string) (ok bool, err error) {
     if err != nil {
         return false, errors.New("casbin 加载策略失败~")
     }
+
+    res, _ := CasbinEnforce.GetRolesForUser("1231312a@a.c")
+    log.Panic(res)
 
     ok, err = CasbinEnforce.Enforce(sub, obj, act)
     return
