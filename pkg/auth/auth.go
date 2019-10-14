@@ -36,3 +36,11 @@ func SaveAuthSession(ctx *gin.Context, users *userModel.Users) {
 func ClearAuthSession(ctx *gin.Context) {
     ctx.SetCookie("UserInfo", "", -1, "/", "localhost", false, true)
 }
+
+func CheckAuthLoginStatus(ctx *gin.Context) bool {
+    if userInfo, err := ctx.Cookie("UserInfo"); userInfo == "" || err != nil {
+        return false
+    }
+
+    return true
+}

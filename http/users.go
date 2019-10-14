@@ -16,6 +16,11 @@ func userList(c *gin.Context) {
 }
 
 func userLogout(c *gin.Context) {
+    if ok := auth.CheckAuthLoginStatus(c); !ok {
+        response.JSON(c, 50000, "用户未登陆", nil)
+        return
+    }
+
     auth.ClearAuthSession(c)
     response.JSON(c, http.StatusNoContent, "退出成功", nil)
 }

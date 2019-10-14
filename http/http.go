@@ -82,12 +82,8 @@ func initRouter(e *gin.Engine) {
         users := api.Group("/users")
         {
             users.GET("/", userList)
-        }
-        // users.Use(middleware.AuthSessionMiddle())
-        {
             users.GET("/logout", userLogout)
         }
-
         // topics
         topics := api.Group("/topics")
         {
@@ -98,14 +94,10 @@ func initRouter(e *gin.Engine) {
         {
             // topics.POST("/store", topicsStore)
         }
-
         // categories
         categories := api.Group("/categories")
         {
             categories.GET("", categoriesList)
-        }
-        // categories.Use(middleware.AuthSessionMiddle())
-        {
             categories.POST("/store", middleware.AuthSessionMiddle(cResRuleName.Communities, "write"), categoriesStore)
         }
     }

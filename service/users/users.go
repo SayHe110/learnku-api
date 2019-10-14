@@ -2,6 +2,7 @@ package users
 
 import (
     "errors"
+    "github.com/gin-gonic/gin"
     "learnku-api/config"
     usersHandle "learnku-api/handler/users"
     "learnku-api/model/users"
@@ -58,4 +59,13 @@ func (s *Service) Login(param *users.UserLoginParam) (*users.Users, error) {
     }
 
     return user, nil
+}
+
+func (s *Service) CheckLogin(ctx *gin.Context) bool {
+    userInfo, err := ctx.Cookie("UserInfo")
+    if userInfo == "" || err != nil {
+        return false
+    }
+
+    return true
 }
