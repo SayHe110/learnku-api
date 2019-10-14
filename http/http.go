@@ -47,6 +47,7 @@ func Init(c *config.Config) {
 
     initService(c)
     initRouter(engine)
+    casbinPkg.InitCasbinEnforce()
 
     if err := engine.Run(config.C.AppConfig.Url); err != nil {
         log.Printf("engine.Start error(%v)", err)
@@ -70,14 +71,12 @@ func initRouter(e *gin.Engine) {
             root.GET("/refresh_token", userRefreshToken)
             root.POST("/login", userLogin)
         }
-
         // communities
         communities := api.Group("/communities", middleware.AuthSessionMiddle("response", "write"))
         {
             communities.GET("", communityList)
             communities.PATCH("/update", communityUpdate)
         }
-
         // users
         users := api.Group("/users")
         {
@@ -90,15 +89,16 @@ func initRouter(e *gin.Engine) {
             topics.GET("/", topicsList)
             topics.GET("/:id", topicsById)
         }
-        topics.Use(middleware.JWT())
-        {
-            // topics.POST("/store", topicsStore)
-        }
         // categories
         categories := api.Group("/categories")
         {
             categories.GET("", categoriesList)
             categories.POST("/store", middleware.AuthSessionMiddle(cResRuleName.Communities, "write"), categoriesStore)
+        }
+        // permission
+        permissions := api.Group("/permissions")
+        {
+            permissions.GET("", permissionList)
         }
     }
 }

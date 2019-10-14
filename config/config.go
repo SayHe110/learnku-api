@@ -10,8 +10,9 @@ import (
 )
 
 const (
-    CONFIGFILENAME = "./.env.yaml"
-    CONFIGFILETYPE = "yaml"
+    CONFIGFILENAME       = "./.env.yaml"
+    CONFIGFILETYPE       = "yaml"
+    CASBINAUTHCONFIGFILE = "./pkg/casbin/auth_model.conf"
 )
 
 type Config struct {

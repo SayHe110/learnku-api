@@ -13,7 +13,10 @@ const (
     _casbinAuthConfigFile = "./pkg/casbin/auth_model.conf"
 )
 
-var ResourcesRuleName = &resourcesRuleName{}
+var (
+    ResourcesRuleName = &resourcesRuleName{}
+    CasbinEnforce     *casbin.Enforcer
+)
 
 type resourcesRuleName struct {
     Communities string
@@ -31,22 +34,30 @@ func init() {
     }
 }
 
+func InitCasbinEnforce() {
+    CasbinEnforce, _ = casbinEnforceFun()
+}
+
 func Enforce(sub, obj, act string) (ok bool, err error) {
-    adapterGorm, err := gormadapter.NewAdapterByDB(db.NewMysql(config.C))
-    if err != nil {
-        return false, errors.New("新建 Gorm 适配器失败~")
-    }
-
-    enforce, err := casbin.NewEnforcer(_casbinAuthConfigFile, adapterGorm)
-    if err != nil {
-        return false, errors.New("casbin 执行失败~")
-    }
-
-    err = enforce.LoadPolicy()
+    err = CasbinEnforce.LoadPolicy()
     if err != nil {
         return false, errors.New("casbin 加载策略失败~")
     }
 
-    ok, err = enforce.Enforce(sub, obj, act)
+    ok, err = CasbinEnforce.Enforce(sub, obj, act)
+    return
+}
+
+func casbinEnforceFun() (en *casbin.Enforcer, err error) {
+    adapterGorm, err := gormadapter.NewAdapterByDB(db.NewMysql(config.C))
+    if err != nil {
+        return nil, errors.New("新建 Gorm 适配器失败~")
+    }
+
+    en, err = casbin.NewEnforcer(_casbinAuthConfigFile, adapterGorm)
+    if err != nil {
+        return nil, errors.New("casbin 执行失败~")
+    }
+
     return
 }

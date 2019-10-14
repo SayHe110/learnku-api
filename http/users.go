@@ -79,7 +79,7 @@ func userLogin(c *gin.Context) {
         return
     }
 
-    user, err := userSvc.Login(userRes);
+    user, err := userSvc.Login(userRes)
     if err != nil {
         response.JSON(c, 50003, err.Error(), nil)
         return
